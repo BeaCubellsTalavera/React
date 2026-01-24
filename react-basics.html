@@ -8,12 +8,17 @@
 
     <script src="https://unpkg.com/supersimpledev/react.js"></script>
     <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+    <script src="https://unpkg.com/supersimpledev/dayjs.js"></script>
 
     <script src="https://unpkg.com/supersimpledev/babel.js"></script>
     <script type="text/babel">
-      const button = <button>I can write it this way instead of document.createElement thanks to JSX, to translate JSX to normal JS we need Babel and the script with type="text/babel"</button>;
       const container = document.querySelector('.js-container');
-      ReactDOM.createRoot(container).render('Welcome to SuperSimpleDev React Course');
+      const root = ReactDOM.createRoot(container);
+      setInterval(() => root.render(
+        <div>
+          <p>Current time: {dayjs().format('HH:mm:ss')}</p>
+        </div>
+      ), 1000);
     </script>
   </body>
 </html>
