@@ -12,43 +12,52 @@
 
     <script src="https://unpkg.com/supersimpledev/babel.js"></script>
     <script type="text/babel">
-      const container = document.querySelector('.js-container');
-      const root = ReactDOM.createRoot(container);
-      function ChatInput() { // Component has to start with capital letter
+      function ChatInput() {
         return (
-          <> {/* this is called a Fragment, it allows to return multiple elements without a wrapper */}
+          <>
             <input type="text" placeholder="Send a message to Chatbot" size="30"/>
             <button>Send</button>
           </>
         );
       }
-      function ChatMessage(props) { // Component properties
-        const message = props.message; // Accessing component properties
-        const sender = props.sender;
 
-        if (sender === 'robot') {
+      function ChatMessage({ message, sender }) { // Component properties
+        /*if (sender === 'robot') {
           return (
             <div>
               <img src="robot.png" alt="robot image" width="50"/>
               {message}
             </div>
           );
-        }
+        }*/
 
         return (
           <div>
+            {sender === 'robot' && (
+              <img src="robot.png" alt="robot image" width="50"/>
+            )}
             {message}
-            <img src="user.png" alt="user image" width="50"/>
+            {sender === 'user' && (
+              <img src="user.png" alt="user image" width="50"/>
+            )}
           </div>
         );
       }
-      root.render(
-        <>
-          <ChatInput />
-          <ChatMessage message="Hello Chatbot!" sender="user" /> {/* Component attributes */}
-          <ChatMessage message="Hello! How can I help you?" sender="robot" />
-        </>
-      ); // To use the component you could do as running the function ChatInput() or with the Component Syntax <ChatInput /> (custom HTML elements thanks to React)
+
+      function App(){
+        return (
+          <>
+            <ChatInput />
+            <ChatMessage 
+              message="Hello Chatbot!" 
+              sender="user" 
+            />
+            <ChatMessage message="Hello! How can I help you?" sender="robot" />
+          </>
+        );
+      }
+      const container = document.querySelector('.js-container');
+      ReactDOM.createRoot(container).render(<App />); // The best practice is to create a component named App as the root component
     </script>
   </body>
 </html>
