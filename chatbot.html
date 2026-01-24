@@ -16,10 +16,10 @@
       const root = ReactDOM.createRoot(container);
       function ChatInput() { // Component has to start with capital letter
         return (
-          <div>
+          <> // this is called a Fragment, it allows to return multiple elements without a wrapper
             <input type="text" />
             <button>Send</button>
-          </div>
+          </>
         );
       }
       root.render(<ChatInput />); // To use the component you could do as running the function ChatInput() or with the Component Syntax <ChatInput /> (custom HTML elements thanks to React)
