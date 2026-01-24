@@ -17,12 +17,38 @@
       function ChatInput() { // Component has to start with capital letter
         return (
           <> {/* this is called a Fragment, it allows to return multiple elements without a wrapper */}
-            <input type="text" />
+            <input type="text" placeholder="Send a message to Chatbot" size="30"/>
             <button>Send</button>
           </>
         );
       }
-      root.render(<ChatInput />); // To use the component you could do as running the function ChatInput() or with the Component Syntax <ChatInput /> (custom HTML elements thanks to React)
+      function ChatMessage(props) { // Component properties
+        const message = props.message; // Accessing component properties
+        const sender = props.sender;
+
+        if (sender === 'robot') {
+          return (
+            <div>
+              <img src="robot.png" alt="robot image" width="50"/>
+              {message}
+            </div>
+          );
+        }
+
+        return (
+          <div>
+            {message}
+            <img src="user.png" alt="user image" width="50"/>
+          </div>
+        );
+      }
+      root.render(
+        <>
+          <ChatInput />
+          <ChatMessage message="Hello Chatbot!" sender="user" /> {/* Component attributes */}
+          <ChatMessage message="Hello! How can I help you?" sender="robot" />
+        </>
+      ); // To use the component you could do as running the function ChatInput() or with the Component Syntax <ChatInput /> (custom HTML elements thanks to React)
     </script>
   </body>
 </html>
