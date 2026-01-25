@@ -28,6 +28,8 @@
               id: crypto.randomUUID() // Generate a unique identifier
             }
           ]); // Update the state with a new array (spread operator)
+
+          setInputText(''); // Clear the input field after sending the message
         }
 
         return (
@@ -37,6 +39,7 @@
               placeholder="Send a message to Chatbot" 
               size="30"
               onChange={saveInputValue}
+              value={inputText}
             />
             <button
               onClick={sendMessage}
