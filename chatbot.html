@@ -3,90 +3,7 @@
   <head>
     <title>Chatbot</title>
     <style>
-      body {
-        font-family: Arial;
-        margin-top: 0px;
-        margin-bottom: 0px;
-      }
-
-      .send-button {
-        background-color: rgb(25, 135, 84);
-        color: white;
-        padding: 12px 20px;
-        border-radius: 10px;
-        margin-left: 10px;
-        border: none;
-        font-size: 15px;
-        cursor: pointer;
-      }
-
-      .chat-input {
-        padding: 12px 15px;
-        border-radius: 10px;
-        font-size: 15px;
-        border-width: 1px;
-
-        flex-grow: 1;
-      }
-
-      .chat-input-container {
-        display: flex;
-        margin-bottom: 60px;
-      }
-
-      .app-container {
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .chat-message-user {
-        display: flex;
-        justify-content: end;
-        align-items: start;
-      }
-
-      .chat-message-robot {
-        display: flex;
-        align-items: start;
-      }
-
-      .chat-message-text {
-        background-color: rgb(238, 238, 238);
-        border-radius: 10px;
-        padding: 15px 20px;
-        margin-right: 10px;
-        margin-left: 10px;
-        margin-bottom: 20px;
-        max-width: 300px;
-      }
-
-      .chat-message-profile {
-        width: 45px;
-      }
-
-      .chat-messages-container {
-        flex-grow: 1;
-        margin-top: 20px;
-        overflow: scroll;
-        scrollbar-width: none; /* For Firefox */
-      }
-
-      .loading-spinner {
-        height: 40px;
-        margin: -15px;
-      }
-
-      .welcome-message {
-        text-align: center;
-        color: gray;
-        margin-top: 50px;
-        font-size: 18px;
-      }
+      
     </style>
   </head>
   <body>
@@ -221,7 +138,7 @@
 
       function ChatMessages({ chatMessages }) {
         const chatMessagesRef = useAutoScroll([chatMessages]); // we use the custom hook to get the reference to the div element
-        
+
         return (
           <div className="chat-messages-container" ref={chatMessagesRef}> {/* we assign the reference to the div element with ref */}
             {chatMessages.length === 0 
