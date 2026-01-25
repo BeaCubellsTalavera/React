@@ -15,12 +15,23 @@
     <script type="text/babel">
       function ChatInput({ chatMessages, setChatMessages }) {
         const [inputText, setInputText] = React.useState('');
+        const [isLoading, setIsLoading] = React.useState(false);
         
         function saveInputValue(event) {
           setInputText(event.target.value);
         }
 
-        function sendMessage() { // state is updated after all of the code is finished
+        async function sendMessage() { // state is updated after all of the code is finished
+          if (isLoading || inputText === '') {
+            return;
+          }
+
+          // Set isLoading to true at the start, and set it to
+          // false after everything is done.
+          setIsLoading(true);
+
+          setInputText('');
+
           const newChatMessages = [
             ...chatMessages,
             {
@@ -30,9 +41,19 @@
             }
           ]
 
-          setChatMessages(newChatMessages); // Update the state with a new array (spread operator)
+          setChatMessages([
+            ...newChatMessages,
+            // This creates a temporary Loading... message.
+            // Because we don't save this message in newChatMessages,
+            // it will be remove later, when we add the response.
+            {
+              message: 'Loading...',
+              sender: 'robot',
+              id: crypto.randomUUID()
+            }
+          ]);
 
-          const response = Chatbot.getResponse(inputText);
+          const response = await Chatbot.getResponseAsync(inputText);
 
           setChatMessages([
             ...newChatMessages,
@@ -43,7 +64,18 @@
             }
           ]);
 
-          setInputText(''); // Clear the input field after sending the message
+          // Set isLoading to false after everything is done.
+          setIsLoading(false);
+        }
+
+        function sendMessageOnEnter(event) {
+          if (event.key === 'Enter') {
+            sendMessage();
+          }
+
+          if (event.key === 'Escape') {
+            setInputText('');
+          }
         }
 
         return (
@@ -53,10 +85,12 @@
               placeholder="Send a message to Chatbot" 
               size="30"
               onChange={saveInputValue}
+              onKeyDown={sendMessageOnEnter}
               value={inputText}
             />
             <button
               onClick={sendMessage}
+              disabled={inputText.length === 0 || isLoading}
             >Send</button>
           </>
         );
