@@ -205,7 +205,7 @@
         // every time chatMessages changes (this is called a dependency array)
 
         return (
-          <div className="chat-messages-container" ref={chatMessagesRef}> // we assign the reference to the div element with ref
+          <div className="chat-messages-container" ref={chatMessagesRef}> {/* we assign the reference to the div element with ref */}
             {chatMessages.map(({ message, sender, id }) => {
               return (
                 <ChatMessage 
@@ -220,10 +220,7 @@
       }
 
       function App(){
-        const [chatMessages, setChatMessages] = React.useState([
-          { message: "Hello Chatbot!", sender: "user", id: "id1" },
-          { message: "Hello! How can I help you?", sender: "robot", id: "id2" }
-        ]); // Lifting the state up
+        const [chatMessages, setChatMessages] = React.useState([]); // Lifting the state up
 
         return (
           <div className="app-container">
