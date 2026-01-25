@@ -53,20 +53,13 @@
         const setChatMessages = array[1]; // function to update the state (update always through this, not with push)
 
         function sendMessage() {
-          chatMessages.push({
-            message: "This is a new message",
-            sender: "user",
-            id: crypto.randomUUID() // Generate a unique identifier
-          });
-
-          console.log(chatMessages);
           setChatMessages([
             ...chatMessages,
             {
-            message: "This is a new message",
-            sender: "user",
-            id: crypto.randomUUID() // Generate a unique identifier
-          }
+              message: "This is a new message",
+              sender: "user",
+              id: crypto.randomUUID() // Generate a unique identifier
+            }
           ]); // Update the state with a new array (spread operator)
         }
 
