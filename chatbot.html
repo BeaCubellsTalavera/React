@@ -12,25 +12,40 @@
 
     <script src="https://unpkg.com/supersimpledev/babel.js"></script>
     <script type="text/babel">
-      function ChatInput() {
+      function ChatInput({ chatMessages, setChatMessages }) {
+        const [inputText, setInputText] = React.useState('');
+        
+        function saveInputValue(event) {
+          setInputText(event.target.value);
+        }
+
+        function sendMessage() {
+          setChatMessages([
+            ...chatMessages,
+            {
+              message: inputText,
+              sender: "user",
+              id: crypto.randomUUID() // Generate a unique identifier
+            }
+          ]); // Update the state with a new array (spread operator)
+        }
+
         return (
           <>
-            <input type="text" placeholder="Send a message to Chatbot" size="30"/>
-            <button>Send</button>
+            <input 
+              type="text" 
+              placeholder="Send a message to Chatbot" 
+              size="30"
+              onChange={saveInputValue}
+            />
+            <button
+              onClick={sendMessage}
+            >Send</button>
           </>
         );
       }
 
-      function ChatMessage({ message, sender }) { // Component properties
-        /*if (sender === 'robot') {
-          return (
-            <div>
-              <img src="robot.png" alt="robot image" width="50"/>
-              {message}
-            </div>
-          );
-        }*/
-
+      function ChatMessage({ message, sender }) {
         return (
           <div>
             {sender === 'robot' && (
@@ -44,28 +59,9 @@
         );
       }
 
-      function ChatMessages() {
-        const array = React.useState([
-          { message: "Hello Chatbot!", sender: "user", id: "id1" },
-          { message: "Hello! How can I help you?", sender: "robot", id: "id2" }
-        ]); // When we change the state, the component re-renders (changes de HTML)
-        const chatMessages = array[0]; // current value of the state
-        const setChatMessages = array[1]; // function to update the state (update always through this, not with push)
-
-        function sendMessage() {
-          setChatMessages([
-            ...chatMessages,
-            {
-              message: "This is a new message",
-              sender: "user",
-              id: crypto.randomUUID() // Generate a unique identifier
-            }
-          ]); // Update the state with a new array (spread operator)
-        }
-
+      function ChatMessages({ chatMessages }) {
         return (
           <>
-            <button onClick={sendMessage}>Send message</button>
             {chatMessages.map(({ message, sender, id }) => {
               return (
                 <ChatMessage 
@@ -80,10 +76,20 @@
       }
 
       function App(){
+        const [chatMessages, setChatMessages] = React.useState([
+          { message: "Hello Chatbot!", sender: "user", id: "id1" },
+          { message: "Hello! How can I help you?", sender: "robot", id: "id2" }
+        ]); // Lifting the state up
+
         return (
           <>
-            <ChatInput />
-            <ChatMessages />
+            <ChatInput 
+              chatMessages={chatMessages} 
+              setChatMessages={setChatMessages}
+            />
+            <ChatMessages
+              chatMessages={chatMessages}
+            />
           </>
         )
       }
