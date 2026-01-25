@@ -8,7 +8,8 @@
 
     <script src="https://unpkg.com/supersimpledev/react.js"></script>
     <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
-    <script src="https://unpkg.com/supersimpledev/dayjs.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev/chatbot.js"></script>
 
     <script src="https://unpkg.com/supersimpledev/babel.js"></script>
     <script type="text/babel">
@@ -19,15 +20,28 @@
           setInputText(event.target.value);
         }
 
-        function sendMessage() {
-          setChatMessages([
+        function sendMessage() { // state is updated after all of the code is finished
+          const newChatMessages = [
             ...chatMessages,
             {
               message: inputText,
               sender: "user",
               id: crypto.randomUUID() // Generate a unique identifier
             }
-          ]); // Update the state with a new array (spread operator)
+          ]
+
+          setChatMessages(newChatMessages); // Update the state with a new array (spread operator)
+
+          const response = Chatbot.getResponse(inputText);
+
+          setChatMessages([
+            ...newChatMessages,
+            {
+              message: response,
+              sender: "robot",
+              id: crypto.randomUUID()
+            }
+          ]);
 
           setInputText(''); // Clear the input field after sending the message
         }
