@@ -75,6 +75,18 @@
         overflow: scroll;
         scrollbar-width: none; /* For Firefox */
       }
+
+      .loading-spinner {
+        height: 40px;
+        margin: -15px;
+      }
+
+      .welcome-message {
+        text-align: center;
+        color: gray;
+        margin-top: 50px;
+        font-size: 18px;
+      }
     </style>
   </head>
   <body>
@@ -87,6 +99,21 @@
 
     <script src="https://unpkg.com/supersimpledev/babel.js"></script>
     <script type="text/babel">
+      function useAutoScroll(dependencies) {
+        const elementRef = React.useRef(null); // saves a reference to an html element from the component (we pass null as initial value)
+        React.useEffect(() => {
+          const containerElem = elementRef.current;
+          if (containerElem) {
+            containerElem.scrollTop = containerElem.scrollHeight; // scrolls to the bottom of the container
+          }
+        }, dependencies); // to run some code after the component is rendered or updated
+        // with empty array as second argument, it runs only after the first render
+        // with chatMessages as second argument, it runs after the first render and
+        // every time chatMessages changes (this is called a dependency array)
+
+        return elementRef; // we return the reference to be used in the component
+      }
+
       function ChatInput({ chatMessages, setChatMessages }) {
         const [inputText, setInputText] = React.useState('');
         const [isLoading, setIsLoading] = React.useState(false);
@@ -121,7 +148,7 @@
             // Because we don't save this message in newChatMessages,
             // it will be remove later, when we add the response.
             {
-              message: 'Loading...',
+              message: <img src="https://supersimple.dev/images/loading-spinner.gif" alt="loading" className="loading-spinner" />,
               sender: 'robot',
               id: crypto.randomUUID()
             }
@@ -193,28 +220,22 @@
       }
 
       function ChatMessages({ chatMessages }) {
-        const chatMessagesRef = React.useRef(null); // saves a reference to an html element from the component (we pass null as initial value)
-        React.useEffect(() => {
-          const containerElem = chatMessagesRef.current;
-          if (containerElem) {
-            containerElem.scrollTop = containerElem.scrollHeight; // scrolls to the bottom of the container
-          }
-        }, [chatMessages]); // to run some code after the component is rendered or updated
-        // with empty array as second argument, it runs only after the first render
-        // with chatMessages as second argument, it runs after the first render and
-        // every time chatMessages changes (this is called a dependency array)
-
+        const chatMessagesRef = useAutoScroll([chatMessages]); // we use the custom hook to get the reference to the div element
+        
         return (
           <div className="chat-messages-container" ref={chatMessagesRef}> {/* we assign the reference to the div element with ref */}
-            {chatMessages.map(({ message, sender, id }) => {
-              return (
-                <ChatMessage 
-                  message={message} 
-                  sender={sender}
-                  key={id}
-                />
-              );
-            })}
+            {chatMessages.length === 0 
+              ? <div className="welcome-message">Welcome to the Chatbot project! Send a message using the textbox below.</div>
+              : chatMessages.map(({ message, sender, id }) => {
+                return (
+                  <ChatMessage 
+                    message={message} 
+                    sender={sender}
+                    key={id}
+                  />
+                );
+              })
+            }
           </div>
         );
       }

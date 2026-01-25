@@ -2,6 +2,18 @@
 <html>
   <head>
     <title>Counter</title>
+    <style>
+      .autoclick-counter {
+        display: flex;
+        gap: 10px;
+        justify-content: center;;
+      }
+
+      .autoclick-counter button {
+        background-color: rgb(25, 135, 84);
+        color: white
+      }
+    </style>
   </head>
   <body>
     <div class="js-container"></div>
@@ -22,6 +34,46 @@
           >
             Clicked {count} {count === 1 ? 'time' : 'times'}
           </button>
+        );
+      }
+
+      function AutoclickCounter({ count, setCount }) {
+        const counterButtonRef = React.useRef(null);
+        
+        function autoClick() {
+          setInterval(() => {
+            const buttonElem = counterButtonRef.current;
+            if (buttonElem) {
+              buttonElem.click();
+            }
+          }, 1000);
+        }
+
+        function handleClick(){
+          setCount(count + 1);
+        }
+
+        return(
+          <div className="autoclick-counter">
+            <button
+              onClick={handleClick}
+              ref={counterButtonRef}
+            >
+              Clicked {count} {count === 1 ? 'time' : 'times'}
+            </button>
+            <button
+              onClick={() => {
+                setCount(0);
+              }}
+            >
+              Reset
+            </button>
+            <button
+              onClick={autoClick}
+            >
+              Auto Click
+            </button>
+          </div>
         );
       }
 
@@ -72,6 +124,10 @@
               Reset
             </button>
             <DisplayAsType />
+            <AutoclickCounter 
+              count={count} 
+              setCount={setCount}
+            />
           </>
         )
       }
