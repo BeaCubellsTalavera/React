@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lesson 4</title>
+    <style>
+      .on-button {
+        background-color: rgb(25, 135, 84);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 10px;
+        border: none;
+        font-size: 15px;
+        cursor: pointer;
+      }
+
+      .off-button {
+        background-color: rgb(220, 53, 69);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 10px;
+        border: none;
+        font-size: 15px;
+        cursor: pointer;
+      }
+
+      .login-form {
+        display: flex;
+        flex-direction: column;
+        max-width: 300px;
+        margin-top: 20px;
+      }
+
+      .login-form input {
+        margin-top: 10px;
+        padding: 10px;
+        font-size: 14px;
+        border-radius: 10px;
+      }
+
+      .buttons-container {
+        display: flex;
+        margin-top: 10px;
+        gap: 10px;
+      }
+
+      .login-form button {
+        background-color: rgb(0, 123, 255);
+        color: white;
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="js-container"></div>
+
+    <script src="https://unpkg.com/supersimpledev/react.js"></script>
+    <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev/dayjs.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+    <script type="text/babel">
+      function Ex4D() {
+        const [showPassword, setShowPassword] = React.useState(false);
+
+        return (
+          <div className="login-form">
+            <h2>Hello, welcome to my website</h2>
+            <input type="email" placeholder="Email"></input>
+            <div>
+              <input type={showPassword ? "text" : "password"} placeholder="Password"></input>
+              <button
+                onClick={() => setShowPassword(!showPassword)}
+              >{showPassword ? "Hide" : "Show"}</button>
+            </div>
+            <div className="buttons-container">
+              <button>Login</button>
+              <button>Sign up</button>
+            </div>
+          </div>
+        )
+      }
+
+      function Ex4F() {
+        const [time, setTime] = React.useState(dayjs().format('HH:mm:ss'));
+
+        React.useEffect(() => {
+          setInterval(() => {
+            setTime(dayjs().format('HH:mm:ss'));
+            console.log('Time updated');
+          }, 1000);
+        }, []);
+        
+        return (
+          <>
+            <h2>Current Time: {time}</h2>
+          </>
+        )
+
+      }
+
+      function App(){
+        const [isButtonOn, setIsButtonOn] = React.useState(true);
+
+        return (
+          <>
+            <button 
+              className={isButtonOn ? "on-button" : "off-button"}
+              onClick={() => setIsButtonOn(!isButtonOn)}
+            >{isButtonOn ? 'ON' : 'OFF'}</button>
+            <Ex4D />
+            <Ex4F />
+          </>
+        )
+      }
+
+      const container = document.querySelector('.js-container');
+      ReactDOM.createRoot(container).render(<App />);
+    </script>
+  </body>
+</html>
