@@ -44,29 +44,47 @@
         );
       }
 
-      function App(){
+      function ChatMessages() {
         const chatMessages = [
           { message: "Hello Chatbot!", sender: "user", id: "id1" },
           { message: "Hello! How can I help you?", sender: "robot", id: "id2" }
         ];
 
+        function sendMessage() {
+          chatMessages.push({
+            message: "This is a new message",
+            sender: "user",
+            id: crypto.randomUUID() // Generate a unique identifier
+          });
+
+          console.log(chatMessages);
+        }
+
         return (
           <>
-            <ChatInput />
-            {
-              chatMessages.map(({ message, sender, id }) => {
-                return (
-                  <ChatMessage 
-                    message={message} 
-                    sender={sender}
-                    key={id}
-                  />
-                );
-              })
-            }
+            <button onClick={sendMessage}>Send message</button>
+            {chatMessages.map(({ message, sender, id }) => {
+              return (
+                <ChatMessage 
+                  message={message} 
+                  sender={sender}
+                  key={id}
+                />
+              );
+            })}
           </>
         );
       }
+
+      function App(){
+        return (
+          <>
+            <ChatInput />
+            <ChatMessages />
+          </>
+        )
+      }
+
       const container = document.querySelector('.js-container');
       ReactDOM.createRoot(container).render(<App />); // The best practice is to create a component named App as the root component
     </script>
