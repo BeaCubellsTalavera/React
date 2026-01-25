@@ -193,8 +193,19 @@
       }
 
       function ChatMessages({ chatMessages }) {
+        const chatMessagesRef = React.useRef(null); // saves a reference to an html element from the component (we pass null as initial value)
+        React.useEffect(() => {
+          const containerElem = chatMessagesRef.current;
+          if (containerElem) {
+            containerElem.scrollTop = containerElem.scrollHeight; // scrolls to the bottom of the container
+          }
+        }, [chatMessages]); // to run some code after the component is rendered or updated
+        // with empty array as second argument, it runs only after the first render
+        // with chatMessages as second argument, it runs after the first render and
+        // every time chatMessages changes (this is called a dependency array)
+
         return (
-          <div className="chat-messages-container">
+          <div className="chat-messages-container" ref={chatMessagesRef}> // we assign the reference to the div element with ref
             {chatMessages.map(({ message, sender, id }) => {
               return (
                 <ChatMessage 
