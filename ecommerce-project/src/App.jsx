@@ -12,7 +12,7 @@ function App() {
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/cart/items') // Axios is a cleaner way to do requests to the backend
+    axios.get('/api/cart/items?expand=product') // Axios is a cleaner way to do requests to the backend
       .then((response) => {
         setCart(response.data);
       });
