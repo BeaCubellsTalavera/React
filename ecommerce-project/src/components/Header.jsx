@@ -85,7 +85,7 @@ function Header({ cart }) {
                     placeholder="Search"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={handleKeyPress}
                 />
 
                 <button 
