@@ -1,20 +1,24 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router';
 import { ProductsGrid } from './ProductsGrid';
 import Header from '../../components/Header';
 import './HomePage.css';
 
 function HomePage({ cart, loadCart }) {
+    const [searchParams] = useSearchParams();
+    const search = searchParams.get('search');
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
         const getHomeData = async () => {
-            const response = await axios.get('/api/products');
+            const url = search ? `/api/products?search=${search}` : '/api/products';
+            const response = await axios.get(url);
             setProducts(response.data);
         };
 
         getHomeData(); // We cannot do async directly in useEffect
-    }, []);
+    }, [search]);
 
     return (
         <>

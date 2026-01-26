@@ -1,11 +1,22 @@
-import { NavLink } from 'react-router'; // It knows which page is loaded and adds an "active" class to the link
+import { useState } from 'react';
+import { NavLink, useNavigate, useSearchParams } from 'react-router'; // It knows which page is loaded and adds an "active" class to the link
 import './Header.css';
 
 function Header({ cart }) {
+    const [searchParams] = useSearchParams();
+    const search = searchParams.get('search');
+    const [searchTerm, setSearchTerm] = useState(search || '');
+    const navigate = useNavigate();
+
     let totalQuantity = 0;
     cart.forEach(item => {
         totalQuantity += item.quantity;
     });
+
+    const handleSearch = () => {
+        console.log("Searching for:", searchTerm);
+        navigate(`/?search=${searchTerm}`);
+    }
 
     return (
         <div className="header">
@@ -19,9 +30,18 @@ function Header({ cart }) {
             </div>
 
             <div className="middle-section">
-                <input className="search-bar" type="text" placeholder="Search" />
+                <input 
+                    className="search-bar" 
+                    type="text" 
+                    placeholder="Search"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
 
-                <button className="search-button">
+                <button 
+                    className="search-button"
+                    onClick={handleSearch}
+                >
                     <img className="search-icon" src="images/icons/search-icon.png" />
                 </button>
             </div>
