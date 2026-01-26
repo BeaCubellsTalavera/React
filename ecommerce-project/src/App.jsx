@@ -12,11 +12,13 @@ function App() {
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/cart-items?expand=product') // Axios is a cleaner way to do requests to the backend
-      .then((response) => {
-        setCart(response.data);
-      });
-  }, []); // Run it just once when the component is mounted
+    const getAppData = async () => {
+      const response = await axios.get('/api/cart-items?expand=product');
+      setCart(response.data);
+    };
+
+    getAppData();
+  }, []);
 
   return (
     <Routes>

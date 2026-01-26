@@ -8,11 +8,13 @@ function HomePage({ cart }) {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        axios.get('/api/products') // Axios is a cleaner way to do requests to the backend
-            .then((response) => {
-                setProducts(response.data);
-            });
-    }, []); // Run it just once when the component is mounted
+        const getHomeData = async () => {
+            const response = await axios.get('/api/products');
+            setProducts(response.data);
+        };
+
+        getHomeData(); // We cannot do async directly in useEffect
+    }, []);
 
     return (
         <>
