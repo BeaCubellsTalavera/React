@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate, useSearchParams } from 'react-router'; // It knows which page is loaded and adds an "active" class to the link
 import './Header.css';
 
@@ -7,6 +7,40 @@ function Header({ cart }) {
     const search = searchParams.get('search');
     const [searchTerm, setSearchTerm] = useState(search || '');
     const navigate = useNavigate();
+    const debounceTimer = useRef(null);
+    const isManualSearch = useRef(false);
+
+    // Debounced search - busca automáticamente después de 500ms de inactividad
+    useEffect(() => {
+        // Si es búsqueda manual, no ejecutar auto-search
+        if (isManualSearch.current) {
+            isManualSearch.current = false; // Reset flag
+            return;
+        }
+
+        // Cancela el timer anterior si existe
+        if (debounceTimer.current) {
+            clearTimeout(debounceTimer.current);
+        }
+
+        debounceTimer.current = setTimeout(() => {
+            if (searchTerm.trim() !== '') {
+                console.log("Auto-searching for:", searchTerm);
+                navigate(`/?search=${searchTerm}`);
+            } else if (searchTerm === '') {
+                // Si el campo está vacío, ir a la página principal
+                console.log("Clearing search, going to home");
+                navigate('/');
+            }
+        }, 500); // Espera 500ms después de que el usuario deje de teclear
+
+        // Cleanup function
+        return () => {
+            if (debounceTimer.current) {
+                clearTimeout(debounceTimer.current);
+            }
+        };
+    }, [searchTerm, navigate]); // Intencionalmente excluimos 'search' para evitar doble ejecución
 
     let totalQuantity = 0;
     cart.forEach(item => {
@@ -14,8 +48,23 @@ function Header({ cart }) {
     });
 
     const handleSearch = () => {
-        console.log("Searching for:", searchTerm);
+        // Marca que es búsqueda manual para evitar auto-search
+        isManualSearch.current = true;
+        
+        // Cancela cualquier timer pendiente
+        if (debounceTimer.current) {
+            clearTimeout(debounceTimer.current);
+            debounceTimer.current = null;
+        }
+        
+        console.log("Manual search for:", searchTerm);
         navigate(`/?search=${searchTerm}`);
+    }
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
     }
 
     return (
@@ -36,6 +85,7 @@ function Header({ cart }) {
                     placeholder="Search"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyPress={handleKeyPress}
                 />
 
                 <button 
