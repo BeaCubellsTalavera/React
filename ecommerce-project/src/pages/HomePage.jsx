@@ -5,11 +5,17 @@ import './HomePage.css';
 
 function HomePage() {
     const [products, setProducts] = useState([]);
+    const [cart, setCart] = useState([]);
 
     useEffect(() => {
         axios.get('http://localhost:3000/api/products') // Axios is a cleaner way to do requests to the backend
             .then((response) => {
                 setProducts(response.data);
+            });
+
+        axios.get('http://localhost:3000/api/cart/items') // Axios is a cleaner way to do requests to the backend
+            .then((response) => {
+                setCart(response.data);
             });
     }, []); // Run it just once when the component is mounted
 
@@ -18,7 +24,7 @@ function HomePage() {
             <title>Ecommerce Project</title>
             <link rel="icon" type="image/svg+xml" href="https://supersimple.dev/images/home-favicon.png" />
 
-            <Header />
+            <Header cart={cart} />
 
             <div className="home-page">
                 <div className="products-grid">

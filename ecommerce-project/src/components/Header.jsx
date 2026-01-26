@@ -1,7 +1,12 @@
 import { NavLink } from 'react-router'; // It knows which page is loaded and adds an "active" class to the link
 import './Header.css';
 
-function Header() {
+function Header({ cart }) {
+    let totalQuantity = 0;
+    cart.forEach(item => {
+        totalQuantity += item.quantity;
+    });
+
     return (
         <div className="header">
             <div className="left-section">
@@ -29,7 +34,7 @@ function Header() {
 
                 <NavLink className="cart-link header-link" to="/checkout">
                     <img className="cart-icon" src="images/icons/cart-icon.png" />
-                    <div className="cart-quantity">3</div>
+                    <div className="cart-quantity">{totalQuantity}</div>
                     <div className="cart-text">Cart</div>
                 </NavLink>
             </div>
