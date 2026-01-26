@@ -7,6 +7,7 @@ export function useAutoScroll(dependencies) {
     if (containerElem) {
       containerElem.scrollTop = containerElem.scrollHeight; // scrolls to the bottom of the container
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies); // to run some code after the component is rendered or updated
   // with empty array as second argument, it runs only after the first render
   // with chatMessages as second argument, it runs after the first render and

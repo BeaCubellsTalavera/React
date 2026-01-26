@@ -9,12 +9,13 @@ function ChatMessages({ chatMessages }) {
     <div className="chat-messages-container" ref={chatMessagesRef}> {/* we assign the reference to the div element with ref */}
       {chatMessages.length === 0 
         ? <div className="welcome-message">Welcome to the Chatbot project! Send a message using the textbox below.</div>
-        : chatMessages.map(({ message, sender, id }) => {
+        : chatMessages.map(({ message, sender, id, time }) => {
           return (
             <ChatMessage 
               message={message} 
               sender={sender}
               key={id}
+              time={time}
             />
           );
         })

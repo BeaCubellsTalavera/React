@@ -1,9 +1,9 @@
+import dayjs from 'dayjs';
 // Vite supports importing any type of files (css, images, etc.).
 import RobotProfileImage from '../assets/robot.png'; // Default export
-import UserProfileImage from '../assets/user.png';
 import './ChatMessage.css';
 
-export function ChatMessage({ message, sender }) {
+export function ChatMessage({ message, sender, time }) {
   return (
     <div className={
       sender === 'user' 
@@ -15,9 +15,14 @@ export function ChatMessage({ message, sender }) {
       )}
       <div className="chat-message-text">
         {message}
+        <div className='message-timestamp'>
+          {
+            dayjs(time).format('h:mma')
+          }
+        </div>
       </div>
       {sender === 'user' && (
-        <img src={UserProfileImage} alt="user image" className="chat-message-profile"/>
+        <img src="https://supersimple.dev/images/profile-1.jpg" alt="user image" className="chat-message-profile-user"/>
       )}
     </div>
   );

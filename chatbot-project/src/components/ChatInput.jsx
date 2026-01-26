@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import dayjs from 'dayjs';
 import { Chatbot } from 'supersimpledev'
 import './ChatInput.css'
 
@@ -26,10 +27,12 @@ export function ChatInput({ chatMessages, setChatMessages }) {
       {
         message: inputText,
         sender: "user",
-        id: crypto.randomUUID() // Generate a unique identifier
+        id: crypto.randomUUID(), // Generate a unique identifier
+        time: dayjs().valueOf()
       }
     ]
 
+    const responseTime = dayjs().valueOf();
     setChatMessages([
       ...newChatMessages,
       // This creates a temporary Loading... message.
@@ -38,7 +41,8 @@ export function ChatInput({ chatMessages, setChatMessages }) {
       {
         message: <img src="https://supersimple.dev/images/loading-spinner.gif" alt="loading" className="loading-spinner" />,
         sender: 'robot',
-        id: crypto.randomUUID()
+        id: crypto.randomUUID(),
+        time: responseTime
       }
     ]);
 
@@ -49,7 +53,8 @@ export function ChatInput({ chatMessages, setChatMessages }) {
       {
         message: response,
         sender: "robot",
-        id: crypto.randomUUID()
+        id: crypto.randomUUID(),
+        time: responseTime
       }
     ]);
 
@@ -65,6 +70,10 @@ export function ChatInput({ chatMessages, setChatMessages }) {
     if (event.key === 'Escape') {
       setInputText('');
     }
+  }
+
+  function clearMessages() {
+    setChatMessages([]);
   }
 
   return (
@@ -83,6 +92,10 @@ export function ChatInput({ chatMessages, setChatMessages }) {
         disabled={inputText.length === 0 || isLoading}
         className="send-button"
       >Send</button>
+      <button
+        onClick={clearMessages}
+        className="clear-button"
+      >Clear</button>
     </div>
   );
 }
