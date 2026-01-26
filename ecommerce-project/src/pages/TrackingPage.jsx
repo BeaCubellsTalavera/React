@@ -2,10 +2,9 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import dayjs from 'dayjs';
-import Header from '../components/Header';
 import './TrackingPage.css';
 
-function TrackingPage({ cart }) {
+function TrackingPage() {
     const { orderId, productId } = useParams();
     const [ order, setOrder ] = useState(null);
 
@@ -34,8 +33,6 @@ function TrackingPage({ cart }) {
         <>
             <title>Tracking</title>
             <link rel="icon" type="image/svg+xml" href="https://supersimple.dev/images/tracking-favicon.png" />
-
-            <Header cart={cart}/>
 
             <div className="tracking-page">
                 <div className="order-tracking">

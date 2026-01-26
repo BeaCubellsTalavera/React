@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { OrdersGrid } from './OrdersGrid';
-import Header from '../../components/Header';
 import './OrdersPage.css';
 
-function OrdersPage({ cart, loadCart }) {
+function OrdersPage({ loadCart }) {
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
@@ -20,8 +19,6 @@ function OrdersPage({ cart, loadCart }) {
         <>
             <title>Orders</title>
             <link rel="icon" type="image/svg+xml" href="https://supersimple.dev/images/orders-favicon.png" />
-
-            <Header cart={cart} />
 
             <div className="orders-page">
                 <div className="page-title">Your Orders</div>

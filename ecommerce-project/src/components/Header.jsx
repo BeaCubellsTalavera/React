@@ -1,91 +1,65 @@
-import { useState, useEffect, useRef } from 'react';
-import { NavLink, useNavigate, useSearchParams, useLocation } from 'react-router'; // It knows which page is loaded and adds an "active" class to the link
+import { useState, useEffect, useCallback } from 'react';
+import { NavLink, useLocation, useNavigate, useSearchParams } from 'react-router'; // It knows which page is loaded and adds an "active" class to the link
 import './Header.css';
+import { useDebounceCallback } from '../../hooks/useDebounceCallback';
 
 function Header({ cart }) {
-    const [searchParams] = useSearchParams();
-    const search = searchParams.get('search');
-    const [searchTerm, setSearchTerm] = useState(search || '');
+    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const location = useLocation();
-    const debounceTimer = useRef(null);
-    const lastSearchTerm = useRef(search || '');
-    const justNavigated = useRef(false);
 
-    // Debounced search - solo se ejecuta cuando el usuario escribe
+    const urlSearchTerm = searchParams.get('search') || '';
+    const [searchTerm, setSearchTerm] = useState(urlSearchTerm);
+
     useEffect(() => {
-        // Si acabamos de navegar, no ejecutar auto-search
-        if (justNavigated.current) {
-            justNavigated.current = false;
-            lastSearchTerm.current = searchTerm;
+        setSearchTerm(urlSearchTerm);
+    }, [urlSearchTerm]);
+
+    const navigateWithSearch = useCallback((term) => {
+        const trimmedTerm = term.trim();
+        const currentTrimmedTerm = (searchParams.get('search') || '').trim();
+        
+        if (trimmedTerm === currentTrimmedTerm){
+            console.log('No change in search term');
             return;
         }
 
-        // Si el searchTerm no ha cambiado realmente, no hacer nada
-        if (searchTerm === lastSearchTerm.current) {
-            return;
-        }
-
-        // Cancela el timer anterior si existe
-        if (debounceTimer.current) {
-            clearTimeout(debounceTimer.current);
-        }
-
-        // Solo crear timer si hay texto y estamos escribiendo
-        if (searchTerm.trim() !== '') {
-            debounceTimer.current = setTimeout(() => {
-                console.log("Auto-searching for:", searchTerm);
-                justNavigated.current = true; // Marcar que vamos a navegar
-                lastSearchTerm.current = searchTerm;
-                navigate(`/?search=${searchTerm}`);
-            }, 500);
-        } else if (searchTerm === '' && location.pathname === '/' && search) {
-            // Solo limpiar si estamos en home y había una búsqueda previa
-            debounceTimer.current = setTimeout(() => {
-                console.log("Clearing search");
-                justNavigated.current = true; // Marcar que vamos a navegar
-                lastSearchTerm.current = '';
-                navigate('/');
-            }, 500);
-        }
-
-        // Cleanup function
-        return () => {
-            if (debounceTimer.current) {
-                clearTimeout(debounceTimer.current);
+        if (!trimmedTerm) {
+            if (location.pathname === '/') {
+                setSearchParams({});
             }
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchTerm]); // Solo depende de searchTerm para evitar loops infinitos
+            return;
+        }
+
+        navigate(`/?search=${encodeURIComponent(term)}`);
+    }, [navigate, location.pathname, setSearchParams, searchParams]);
+
+   const { debounced: debouncedNavigate, cancel } = useDebounceCallback(navigateWithSearch, 500); 
 
     let totalQuantity = 0;
     cart.forEach(item => {
         totalQuantity += item.quantity;
     });
 
-    const handleSearch = () => {
-        // Cancela cualquier timer pendiente para evitar búsquedas duplicadas
-        if (debounceTimer.current) {
-            clearTimeout(debounceTimer.current);
-            debounceTimer.current = null;
-        }
-        
-        console.log("Manual search for:", searchTerm);
-        justNavigated.current = true; // Marcar que vamos a navegar
-        lastSearchTerm.current = searchTerm;
-        navigate(`/?search=${searchTerm}`);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        cancel();
+        console.log('Manual submit:', searchTerm);
+        navigateWithSearch(searchTerm);
     }
 
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            handleSearch();
-        }
+    const handleChange = (e) => {
+        const newSearchTerm = e.target.value;
+        setSearchTerm(newSearchTerm);
+
+        debouncedNavigate(newSearchTerm);
     }
 
     return (
         <div className="header">
             <div className="left-section">
-                <NavLink to="/" className="header-link"> {/* Instead of <a href="/"> we use <Link to="/"> */ }
+                <NavLink to="/" className="header-link"> {/* Instead of <a href="/"> we use <Link to="/"> */}
                     <img className="logo"
                         src="images/logo-white.png" />
                     <img className="mobile-logo"
@@ -93,23 +67,25 @@ function Header({ cart }) {
                 </NavLink>
             </div>
 
-            <div className="middle-section">
-                <input 
-                    className="search-bar" 
-                    type="text" 
+            <form 
+                className="middle-section" 
+                onSubmit={handleSubmit}
+            >
+                <input
+                    className="search-bar"
+                    type="text"
                     placeholder="Search"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyDown={handleKeyPress}
+                    onChange={handleChange}
                 />
 
-                <button 
+                <button
                     className="search-button"
-                    onClick={handleSearch}
+                    type="submit"
                 >
                     <img className="search-icon" src="images/icons/search-icon.png" />
                 </button>
-            </div>
+            </form>
 
             <div className="right-section">
                 <NavLink className="orders-link header-link" to="/orders">

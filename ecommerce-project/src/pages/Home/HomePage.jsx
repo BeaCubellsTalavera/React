@@ -2,10 +2,9 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { ProductsGrid } from './ProductsGrid';
-import Header from '../../components/Header';
 import './HomePage.css';
 
-function HomePage({ cart, loadCart }) {
+function HomePage({ loadCart }) {
     const [searchParams] = useSearchParams();
     const search = searchParams.get('search');
     const [products, setProducts] = useState([]);
@@ -24,8 +23,6 @@ function HomePage({ cart, loadCart }) {
         <>
             <title>Ecommerce Project</title>
             <link rel="icon" type="image/svg+xml" href="https://supersimple.dev/images/home-favicon.png" />
-
-            <Header cart={cart} />
 
             <div className="home-page">
                 <ProductsGrid products={products} loadCart={loadCart} />
