@@ -27,6 +27,7 @@ export function Product({ product, loadCart }) {
         <div className="product-container">
             <div className="product-image-container">
                 <img className="product-image"
+                    data-testid="product-image" // to be able to find the image element in the test, we could use the class name but it we would break the test
                     src={product.image} />
             </div>
             <div className="product-name limit-text-to-2-lines">
@@ -35,6 +36,7 @@ export function Product({ product, loadCart }) {
 
             <div className="product-rating-container">
                 <img className="product-rating-stars"
+                    data-testid="product-rating-stars"
                     src={`images/ratings/rating-${product.rating.stars * 10}.png`} />
                 <div className="product-rating-count link-primary">
                     {product.rating.count}
