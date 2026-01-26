@@ -13,3 +13,5 @@ Esto hace:
     2. Correr create-vite en la linea de comando (npx donde 'x' es ejecutar)
 
 Abre el serve con `npm run dev`
+
+`npm i --save-dev vitest`Con --save-dev se indica que se usa solo en development.
