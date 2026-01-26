@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { NavLink, useNavigate, useSearchParams } from 'react-router'; // It knows which page is loaded and adds an "active" class to the link
+import { NavLink, useNavigate, useSearchParams, useLocation } from 'react-router'; // It knows which page is loaded and adds an "active" class to the link
 import './Header.css';
 
 function Header({ cart }) {
@@ -7,14 +7,22 @@ function Header({ cart }) {
     const search = searchParams.get('search');
     const [searchTerm, setSearchTerm] = useState(search || '');
     const navigate = useNavigate();
+    const location = useLocation();
     const debounceTimer = useRef(null);
-    const isManualSearch = useRef(false);
+    const lastSearchTerm = useRef(search || '');
+    const justNavigated = useRef(false);
 
-    // Debounced search - busca automáticamente después de 500ms de inactividad
+    // Debounced search - solo se ejecuta cuando el usuario escribe
     useEffect(() => {
-        // Si es búsqueda manual, no ejecutar auto-search
-        if (isManualSearch.current) {
-            isManualSearch.current = false; // Reset flag
+        // Si acabamos de navegar, no ejecutar auto-search
+        if (justNavigated.current) {
+            justNavigated.current = false;
+            lastSearchTerm.current = searchTerm;
+            return;
+        }
+
+        // Si el searchTerm no ha cambiado realmente, no hacer nada
+        if (searchTerm === lastSearchTerm.current) {
             return;
         }
 
@@ -23,16 +31,23 @@ function Header({ cart }) {
             clearTimeout(debounceTimer.current);
         }
 
-        debounceTimer.current = setTimeout(() => {
-            if (searchTerm.trim() !== '') {
+        // Solo crear timer si hay texto y estamos escribiendo
+        if (searchTerm.trim() !== '') {
+            debounceTimer.current = setTimeout(() => {
                 console.log("Auto-searching for:", searchTerm);
+                justNavigated.current = true; // Marcar que vamos a navegar
+                lastSearchTerm.current = searchTerm;
                 navigate(`/?search=${searchTerm}`);
-            } else if (searchTerm === '') {
-                // Si el campo está vacío, ir a la página principal
-                console.log("Clearing search, going to home");
+            }, 500);
+        } else if (searchTerm === '' && location.pathname === '/' && search) {
+            // Solo limpiar si estamos en home y había una búsqueda previa
+            debounceTimer.current = setTimeout(() => {
+                console.log("Clearing search");
+                justNavigated.current = true; // Marcar que vamos a navegar
+                lastSearchTerm.current = '';
                 navigate('/');
-            }
-        }, 500); // Espera 500ms después de que el usuario deje de teclear
+            }, 500);
+        }
 
         // Cleanup function
         return () => {
@@ -40,7 +55,8 @@ function Header({ cart }) {
                 clearTimeout(debounceTimer.current);
             }
         };
-    }, [searchTerm, navigate]); // Intencionalmente excluimos 'search' para evitar doble ejecución
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchTerm]); // Solo depende de searchTerm para evitar loops infinitos
 
     let totalQuantity = 0;
     cart.forEach(item => {
@@ -48,16 +64,15 @@ function Header({ cart }) {
     });
 
     const handleSearch = () => {
-        // Marca que es búsqueda manual para evitar auto-search
-        isManualSearch.current = true;
-        
-        // Cancela cualquier timer pendiente
+        // Cancela cualquier timer pendiente para evitar búsquedas duplicadas
         if (debounceTimer.current) {
             clearTimeout(debounceTimer.current);
             debounceTimer.current = null;
         }
         
         console.log("Manual search for:", searchTerm);
+        justNavigated.current = true; // Marcar que vamos a navegar
+        lastSearchTerm.current = searchTerm;
         navigate(`/?search=${searchTerm}`);
     }
 
