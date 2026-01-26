@@ -1,11 +1,11 @@
 import Header from '../components/Header';
 
-function NotFoundPage() {
+function NotFoundPage({ cart }) {
     return (
         <>
             <title>Page Not Found</title>
 
-            <Header />
+            <Header cart={cart}/>
 
             <div>
                 <h1>404 - Page Not Found</h1>
