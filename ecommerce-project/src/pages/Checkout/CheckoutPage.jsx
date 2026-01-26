@@ -75,20 +75,22 @@ function CheckoutPage({ cart }) {
                                                             priceString = `${formatMoney(option.priceCents)} - Shipping`;
                                                         }
 
-                                                        <div key={option.id} className="delivery-option">
-                                                            <input type="radio" 
-                                                                checked={option.id === item.deliveryOptionId}
-                                                                className="delivery-option-input"
-                                                                name={`delivery-option-${item.productId}`} />
-                                                            <div>
-                                                                <div className="delivery-option-date">
-                                                                    {dayjs(option.estimatedDeliveryTimeMs).format('dddd, MMMM D')}
-                                                                </div>
-                                                                <div className="delivery-option-price">
-                                                                    {priceString}
+                                                        return (
+                                                            <div key={option.id} className="delivery-option">
+                                                                <input type="radio" 
+                                                                    checked={option.id === item.deliveryOptionId}
+                                                                    className="delivery-option-input"
+                                                                    name={`delivery-option-${item.productId}`} />
+                                                                <div>
+                                                                    <div className="delivery-option-date">
+                                                                        {dayjs(option.estimatedDeliveryTimeMs).format('dddd, MMMM D')}
+                                                                    </div>
+                                                                    <div className="delivery-option-price">
+                                                                        {priceString}
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        );
                                                     })
                                                 }
                                             </div>
