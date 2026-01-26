@@ -3,19 +3,13 @@ import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import './HomePage.css';
 
-function HomePage() {
+function HomePage({ cart }) {
     const [products, setProducts] = useState([]);
-    const [cart, setCart] = useState([]);
 
     useEffect(() => {
         axios.get('/api/products') // Axios is a cleaner way to do requests to the backend
             .then((response) => {
                 setProducts(response.data);
-            });
-
-        axios.get('/api/cart/items') // Axios is a cleaner way to do requests to the backend
-            .then((response) => {
-                setCart(response.data);
             });
     }, []); // Run it just once when the component is mounted
 
