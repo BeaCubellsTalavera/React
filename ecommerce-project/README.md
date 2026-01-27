@@ -14,3 +14,5 @@ If you are developing a production application, we recommend using TypeScript wi
 Run tests with `npx vitest`
 
 `npm install --save-dev @testing-library/react@16.3.0 @testing-library/jest-dom@6.6.3 @testing-library/user-event@14.6.1 jsdom@26.1.0`
+
+With `npm run build` we run `vite build` which converts all the jsx to js, saves the code in a folder called `dist`. It also minifies (compresses) the code in one file for js and another for css.

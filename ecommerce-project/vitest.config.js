@@ -7,5 +7,8 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: './setupTests.js',
+  },
+  build: {
+    outDir: '../ecommerce-backend/dist' // When we run npm run build (vite build), the code is saved in ecommerce-backend/dist folder so that we can upload to AWS backend and frontend together
   }
 });
