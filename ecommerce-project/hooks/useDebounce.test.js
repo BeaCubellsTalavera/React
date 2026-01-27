@@ -235,9 +235,9 @@ describe('useDebounce', () => {
     });
 
     it('cleans up timeout on unmount', () => {
-        const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
+        const clearTimeoutSpy = vi.spyOn(globalThis, 'clearTimeout');
 
-        const { result, rerender, unmount } = renderHook(
+        const { _, rerender, unmount } = renderHook(
             ({ value, delay }) => useDebounce({ value, delay }),
             { initialProps: { value: 'initial', delay: 500 } }
         );
