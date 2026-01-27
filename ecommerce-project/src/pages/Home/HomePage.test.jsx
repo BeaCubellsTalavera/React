@@ -47,7 +47,7 @@ describe('HomePage component', () => {
 
     it('displays the products correctly', async () => {
         render(
-            <MemoryRouter>
+            <MemoryRouter> {/* MemoryRouter is needed because HomePage uses Link components that need to be inside a Router */}
                 <HomePage cart={[]} loadCart={loadCart} />
             </MemoryRouter>
         );
