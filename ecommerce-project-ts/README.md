@@ -57,3 +57,5 @@ export default defineConfig({
 3. Install the [React DevTools Chrome extension](https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en).
 4. In your project (open the URL provided by Vite in the browser), open the Inspector, and open the "Components" tab.
 5. If there's a badge beside the components called "Memo ✨" the React Compiler is working.
+
+El file vite-env.d.ts con `/// <reference types="vite/client" />` hace que se pueda usar la funcionalidad de Vite de importar cualquier archivo (.png, .css, ...) con TypeScript.
