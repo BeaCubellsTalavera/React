@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router'
+import { Routes, Route, useLocation } from 'react-router'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import HomePage from './pages/Home/HomePage'
@@ -12,13 +12,12 @@ import './App.css'
 
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const location = useLocation();
 
-  const shouldShowHeader = (): boolean => {
-    const routesWithoutHeader = ['/checkout'];
-    return !routesWithoutHeader.some(route => 
-      location.pathname === route || location.pathname.startsWith(route + '/')
-    );
-  };
+  const hideHeaderPaths = ['/checkout'];  // Array de paths donde ocultar header
+  const shouldShowHeader = !hideHeaderPaths.some(path => 
+    location.pathname === path || location.pathname.startsWith(path + '/')
+  );
 
   const loadCart = async (): Promise<void> => {
     const response = await axios.get<CartItem[]>('/api/cart-items?expand=product');
@@ -31,7 +30,7 @@ function App() {
 
   return (
     <>
-      {shouldShowHeader() && <Header cart={cart} />}
+      {shouldShowHeader && <Header cart={cart} />}
       <Routes>
         <Route index element={<HomePage cart={cart} loadCart={loadCart} />} /> {/* path="/" is the same as index */}
         <Route path="checkout" element={<CheckoutPage cart={cart} loadCart={loadCart} />} />
