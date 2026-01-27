@@ -1,9 +1,8 @@
 import { it, expect, describe, vi, beforeEach } from 'vitest';
 import { render, screen, within } from '@testing-library/react'; // within let's us look for things inside a specific element
 import { MemoryRouter } from 'react-router'; // Special router for testing purposes
-import userEvent from '@testing-library/user-event';
 import axios from 'axios'; // This is already a mocked version of axios because of the vi.mock call
-import { HomePage } from './HomePage';
+import HomePage from './HomePage';
 
 vi.mock('axios'); // Mock an entire npm package
 
