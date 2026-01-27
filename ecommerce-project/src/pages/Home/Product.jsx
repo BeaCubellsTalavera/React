@@ -53,6 +53,7 @@ export function Product({ product, loadCart }) {
                 <select
                     value={quantity}
                     onChange={selectQuantity}
+                    data-testid="product-quantity-select"
                 >
                     {Array.from({ length: 10 }, (_, index) => (
                         <option key={index + 1} value={index + 1}>
