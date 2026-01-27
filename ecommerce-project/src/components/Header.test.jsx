@@ -3,7 +3,6 @@ import { render, screen, act } from '@testing-library/react';
 import { MemoryRouter, useLocation } from 'react-router';
 import userEvent from '@testing-library/user-event';
 import Header from './Header';
-import * as ReactRouter from 'react-router';
 
 vi.mock('axios'); // Mock an entire npm package
 
@@ -31,6 +30,24 @@ describe('Header component', () => {
                 <Header cart={cart} />
             </MemoryRouter>
         );
+
+        const logo = screen.getByTestId('header-logo');
+        expect(logo).toHaveAttribute('src', 'images/logo-white.png');
+
+        const mobileLogo = screen.getByTestId('header-mobile-logo');
+        expect(mobileLogo).toHaveAttribute('src', 'images/mobile-logo-white.png');
+
+        expect(screen.getByTestId('header-search-bar')).toBeInTheDocument();
+        expect(screen.getByTestId('header-search-button')).toBeInTheDocument();
+
+        const ordersLink = screen.getByTestId('header-orders-link');
+        expect(ordersLink).toHaveTextContent('Orders');
+        expect(ordersLink).toHaveAttribute('href', '/orders');
+
+        const cartLink = screen.getByTestId('header-cart-link');
+        expect(cartLink).toHaveTextContent('Cart');
+        expect(cartLink).toHaveTextContent('5');
+        expect(cartLink).toHaveAttribute('href', '/checkout');
     });
 
     describe('Search functionality', () => {
@@ -143,6 +160,32 @@ describe('Header component', () => {
             expect(screen.getByTestId('url-path')).toHaveTextContent('/?search=phone');
         });
 
+        it('navigates to root path when text is removed from search input and the user stops typing for more than 500ms', async () => {
+            function Location() {
+                const location = useLocation();
+                return <div data-testid="url-path">{location.pathname + location.search}</div>;
+            }
+
+            render(
+                <MemoryRouter initialEntries={['/?search=laptop']}>
+                    <Header cart={[]} />
+                    <Location />
+                </MemoryRouter>
+            );
+
+            const searchInput = screen.getByTestId("header-search-bar");
+            expect(searchInput).toHaveValue('laptop');
+            expect(screen.getByTestId('url-path').textContent).toBe('/?search=laptop');
+
+            await user.clear(searchInput);
+            // Wait for more than 500ms to allow the debounced function to execute
+            await act(async () => {
+                await new Promise(resolve => setTimeout(resolve, 600));
+            });
+
+            expect(screen.getByTestId('url-path').textContent).toBe('/');
+        });
+
         it('cancels auto-search when manual search is performed before debounce', async () => {
             let navigationCount = 0;
 
@@ -187,6 +230,7 @@ describe('Header component', () => {
         });
 
         it('prevents duplicate navigation when manual search cancels auto-search', async () => {
+            const ReactRouter = await import('react-router');
             const mockNavigate = vi.fn();
             const navigateSpy = vi.spyOn(ReactRouter, 'useNavigate').mockReturnValue(mockNavigate);
 
