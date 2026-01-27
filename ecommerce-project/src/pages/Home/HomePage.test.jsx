@@ -13,6 +13,7 @@ describe('HomePage component', () => {
 
     beforeEach(() => {
         loadCart = vi.fn(); // Mock function that does nothing
+        axios.post.mockClear(); // I can reset only one specific mocked method
 
         axios.get.mockImplementation(async (urlPath) => {
             if (urlPath === '/api/products') {
@@ -49,9 +50,9 @@ describe('HomePage component', () => {
         user = userEvent.setup();
     });
 
-    afterEach(() => {
-        vi.clearAllMocks();
-    });
+    // afterEach(() => {
+    //     vi.clearAllMocks(); // I can clear all mocks after each test
+    // });
 
     it('displays the products correctly', async () => {
         render(
@@ -104,7 +105,6 @@ describe('HomePage component', () => {
         );
 
         const productContainers = await screen.findAllByTestId('product-container');
-
 
         const quantitySelector1 = within(productContainers[0])
             .getByTestId('product-quantity-select');
