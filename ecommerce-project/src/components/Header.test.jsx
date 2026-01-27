@@ -50,6 +50,69 @@ describe('Header component', () => {
         expect(cartLink).toHaveAttribute('href', '/checkout');
     });
 
+    it('navigates to orders page when Orders link is clicked', async () => {
+        function Location() {
+            const location = useLocation();
+            return <div data-testid="url-path">{location.pathname}</div>;
+        }
+
+        render(
+            <MemoryRouter initialEntries={['/']}>
+                <Header cart={cart} />
+                <Location />
+            </MemoryRouter>
+        );
+
+        const ordersLink = screen.getByTestId('header-orders-link');
+        await act(async () => {
+            await user.click(ordersLink);
+        });
+
+        expect(screen.getByTestId('url-path').textContent).toBe('/orders');
+    });
+
+    it('navigates to checkout page when Cart link is clicked', async () => {
+        function Location() {
+            const location = useLocation();
+            return <div data-testid="url-path">{location.pathname}</div>;
+        }
+
+        render(
+            <MemoryRouter initialEntries={['/']}>
+                <Header cart={cart} />
+                <Location />
+            </MemoryRouter>
+        );
+
+        const cartLink = screen.getByTestId('header-cart-link');
+        await act(async () => {
+            await user.click(cartLink);
+        });
+
+        expect(screen.getByTestId('url-path').textContent).toBe('/checkout');
+    });
+
+    it('navigates to home page when logo is clicked', async () => {
+        function Location() {
+            const location = useLocation();
+            return <div data-testid="url-path">{location.pathname}</div>;
+        }
+
+        render(
+            <MemoryRouter initialEntries={['/orders']}>
+                <Header cart={cart} />
+                <Location />
+            </MemoryRouter>
+        );
+
+        const logo = screen.getByTestId('header-logo');
+        await act(async () => {
+            await user.click(logo);
+        });
+
+        expect(screen.getByTestId('url-path').textContent).toBe('/');
+    });
+
     describe('Search functionality', () => {
         it('displays the search term from URL params in the search input', () => {
             render(
