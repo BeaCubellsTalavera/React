@@ -44,6 +44,23 @@ describe('HomePage component', () => {
                     ]
                 };
             }
+            if (urlPath === '/api/products?search=laptop') {
+                return {
+                    data: [
+                        {
+                            id: "d5a764cd-2f11-456f-81cd-714adec6ba34",
+                            image: "images/products/laptop-sleeve.jpg",
+                            name: "Laptop Sleeve",
+                            rating: {
+                                stars: 3.5,
+                                count: 25
+                            },
+                            priceCents: 200199,
+                            keywords: ["tech", "computer"]
+                        }
+                    ]
+                };
+            }
 
         }); // Mock axios.get to return products data
 
@@ -131,5 +148,17 @@ describe('HomePage component', () => {
             quantity: 3
         });
         expect(loadCart).toHaveBeenCalledTimes(2);
+    });
+
+    it('filters products by the search term from URL params', async () => {
+        render(
+            <MemoryRouter initialEntries={['/?search=laptop']}>
+                <HomePage cart={[]} loadCart={loadCart} />
+            </MemoryRouter>
+        );
+
+        const productContainers = await screen.findAllByTestId('product-container');
+        expect(productContainers.length).toBe(1);
+        expect(axios.get).toHaveBeenCalledWith('/api/products?search=laptop');
     });
 });
