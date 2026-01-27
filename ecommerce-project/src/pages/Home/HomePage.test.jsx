@@ -1,4 +1,4 @@
-import { it, expect, describe, vi, beforeEach, afterEach } from 'vitest';
+import { it, expect, describe, vi, beforeEach } from 'vitest';
 import { render, screen, within } from '@testing-library/react'; // within let's us look for things inside a specific element
 import { MemoryRouter } from 'react-router'; // Special router for testing purposes
 import userEvent from '@testing-library/user-event';
