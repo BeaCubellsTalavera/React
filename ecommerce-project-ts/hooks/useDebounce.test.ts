@@ -237,7 +237,7 @@ describe('useDebounce', () => {
     it('cleans up timeout on unmount', () => {
         const clearTimeoutSpy = vi.spyOn(globalThis, 'clearTimeout');
 
-        const { _, rerender, unmount } = renderHook(
+        const { rerender, unmount } = renderHook(
             ({ value, delay }) => useDebounce({ value, delay }),
             { initialProps: { value: 'initial', delay: 500 } }
         );
@@ -256,8 +256,8 @@ describe('useDebounce', () => {
 
     it('handles empty string and falsy values', () => {
         const { result, rerender } = renderHook(
-            ({ value, delay }) => useDebounce({ value, delay }),
-            { initialProps: { value: 'initial', delay: 500 } }
+            ({ value, delay }: { value: string | null | undefined | boolean | number, delay: number }) => useDebounce({ value, delay }),
+            { initialProps: { value: 'initial' as string | null | undefined | boolean | number, delay: 500 } }
         );
 
         // Test empty string

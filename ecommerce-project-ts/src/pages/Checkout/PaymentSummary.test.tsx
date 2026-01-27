@@ -7,11 +7,12 @@ import axios from 'axios';
 import { PaymentSummary } from './PaymentSummary';
 import type { PaymentSummaryData } from '../../types';
 
-vi.mock('axios', () => ({
-    default: {
-        post: vi.fn()
-    }
-}));
+vi.mock('axios');
+// vi.mock('axios', () => ({
+//     default: {
+//         post: vi.fn()
+//     }
+// }));
 
 describe('PaymentSummary component', () => {
     let loadCart: MockedFunction<() => Promise<void>>;

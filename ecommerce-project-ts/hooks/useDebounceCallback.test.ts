@@ -136,7 +136,7 @@ describe('useDebounceCallback', () => {
     it('updates when callback or delay changes', () => {
         const callback1 = vi.fn();
         const callback2 = vi.fn();
-        let delay = 500;
+        const delay = 500;
 
         const { result, rerender } = renderHook(
             ({ cb, d }) => useDebounceCallback(cb, d),

@@ -6,12 +6,13 @@ import type { UserEvent } from '@testing-library/user-event';
 import axios from 'axios'; // This is already a mocked version of axios because of the vi.mock call
 import HomePage from './HomePage';
 
-vi.mock('axios', () => ({
-    default: {
-        get: vi.fn(),
-        post: vi.fn()
-    }
-}));
+vi.mock('axios');
+// vi.mock('axios', () => ({
+//     default: {
+//         get: vi.fn(),
+//         post: vi.fn()
+//     }
+// }));
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockedAxios = axios as any;

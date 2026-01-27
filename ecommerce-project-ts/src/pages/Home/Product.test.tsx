@@ -6,11 +6,12 @@ import axios from 'axios'; // This is already a mocked version of axios because 
 import { Product } from './Product';
 import type { Product as ProductType } from '../../types';
 
-vi.mock('axios', () => ({
-    default: {
-        post: vi.fn()
-    }
-}));
+vi.mock('axios');
+// vi.mock('axios', () => ({
+//     default: {
+//         post: vi.fn()
+//     }
+// }));
 
 describe('Product component', () => {
     let product: ProductType;
