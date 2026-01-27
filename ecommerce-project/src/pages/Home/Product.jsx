@@ -24,7 +24,9 @@ export function Product({ product, loadCart }) {
     };
 
     return (
-        <div className="product-container">
+        <div className="product-container"
+            data-testid={"product-container"}
+        >
             <div className="product-image-container">
                 <img className="product-image"
                     data-testid="product-image" // to be able to find the image element in the test, we could use the class name but it we would break the test
