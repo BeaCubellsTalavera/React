@@ -20,7 +20,6 @@ function Header({ cart }) {
         const currentTrimmedTerm = (searchParams.get('search') || '').trim();
         
         if (trimmedTerm === currentTrimmedTerm){
-            console.log('No change in search term');
             return;
         }
 
@@ -45,7 +44,6 @@ function Header({ cart }) {
         e.preventDefault();
 
         cancel();
-        console.log('Manual submit:', searchTerm);
         navigateWithSearch(searchTerm);
     }
 
@@ -61,9 +59,11 @@ function Header({ cart }) {
             <div className="left-section">
                 <NavLink to="/" className="header-link"> {/* Instead of <a href="/"> we use <Link to="/"> */}
                     <img className="logo"
-                        src="images/logo-white.png" />
+                        src="images/logo-white.png"
+                        data-testid="header-logo" />
                     <img className="mobile-logo"
-                        src="images/mobile-logo-white.png" />
+                        src="images/mobile-logo-white.png"
+                        data-testid="header-mobile-logo" />
                 </NavLink>
             </div>
 
@@ -77,23 +77,29 @@ function Header({ cart }) {
                     placeholder="Search"
                     value={searchTerm}
                     onChange={handleChange}
+                    data-testid="header-search-bar"
                 />
 
                 <button
                     className="search-button"
                     type="submit"
+                    data-testid="header-search-button"
                 >
                     <img className="search-icon" src="images/icons/search-icon.png" />
                 </button>
             </form>
 
             <div className="right-section">
-                <NavLink className="orders-link header-link" to="/orders">
+                <NavLink className="orders-link header-link" to="/orders"
+                    data-testid="header-orders-link"
+                >
 
                     <span className="orders-text">Orders</span>
                 </NavLink>
 
-                <NavLink className="cart-link header-link" to="/checkout">
+                <NavLink className="cart-link header-link" to="/checkout"
+                    data-testid="header-cart-link"
+                >
                     <img className="cart-icon" src="images/icons/cart-icon.png" />
                     <div className="cart-quantity">{totalQuantity}</div>
                     <div className="cart-text">Cart</div>
