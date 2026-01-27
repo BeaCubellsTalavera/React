@@ -299,7 +299,7 @@ describe('Header component', () => {
         it('prevents duplicate navigation when manual search cancels auto-search', async () => {
             const ReactRouter = await import('react-router');
             const mockNavigate = vi.fn();
-            const navigateSpy = vi.spyOn(ReactRouter, 'useNavigate').mockReturnValue(mockNavigate);
+            const navigateSpy = vi.spyOn(ReactRouter, 'useNavigate').mockImplementation(() => mockNavigate);
 
             render(
                 <MemoryRouter initialEntries={['/']}>
