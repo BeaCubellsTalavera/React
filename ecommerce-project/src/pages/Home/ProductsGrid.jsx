@@ -1,6 +1,6 @@
 import { Product } from './Product';
 
-export function ProductsGrid({ products, loadCart, lastProductElementRef }) {
+export function ProductsGrid({ products, loadCart, lastElementRef }) {
     return (
         <div className="products-grid">
             {products.map((product, index) => {
@@ -9,7 +9,7 @@ export function ProductsGrid({ products, loadCart, lastProductElementRef }) {
                         key={product.id} 
                         product={product} 
                         loadCart={loadCart} 
-                        ref={index === products.length - 1 ? lastProductElementRef : null}
+                        ref={index === products.length - 1 ? lastElementRef : null}
                     />
                 );
             })}
