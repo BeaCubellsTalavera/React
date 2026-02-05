@@ -23,6 +23,7 @@ const ROLES = {
     ],
     user: [
         "view:products",
+        "update:ownProducts"
     ]
 } as const;
 /*

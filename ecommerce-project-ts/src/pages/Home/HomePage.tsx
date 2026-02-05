@@ -2,9 +2,25 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { ProductsGrid } from './ProductsGrid';
-import type { HomePageProps, Product } from '../../types';
+import type { HomePageProps, Product, User } from '../../types';
 import './HomePage.css';
 import { hasPermission } from '../../auth/auth';
+
+const adminUser: User = {
+    id: "some-admin-id",
+    role: "admin",
+    name: "Admin User",
+    age: 35
+};
+
+const user: User = {
+    id: "some-user-id",
+    role: "user",
+    name: "John Doe",
+    age: 30
+};
+
+const authorId = "some-user-id";
 
 function HomePage({ loadCart }: HomePageProps) {
     const [searchParams] = useSearchParams();
@@ -28,10 +44,24 @@ function HomePage({ loadCart }: HomePageProps) {
 
             <div className="home-page">
                 {
-                    hasPermission({ id: "some-user-id", role: "admin" }, "view:products") 
+                    hasPermission(adminUser, "view:products") 
                         && <ProductsGrid products={products} loadCart={loadCart} />
                 }
             </div>
+
+            {
+                hasPermission(user, "update:products")
+                || (
+                    hasPermission(user, "update:ownProducts")
+                    && user.id === authorId
+                )
+                && (
+                    <div>
+                        Dummy update own products test
+                    </div>
+                )
+            }
+            
         </>
     );
 }
