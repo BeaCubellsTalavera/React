@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router';
 import { ProductsGrid } from './ProductsGrid';
 import type { HomePageProps, Product } from '../../types';
 import './HomePage.css';
+import { hasPermission } from '../../auth/auth';
 
 function HomePage({ loadCart }: HomePageProps) {
     const [searchParams] = useSearchParams();
@@ -26,7 +27,10 @@ function HomePage({ loadCart }: HomePageProps) {
             <link rel="icon" type="image/svg+xml" href="https://supersimple.dev/images/home-favicon.png" />
 
             <div className="home-page">
-                <ProductsGrid products={products} loadCart={loadCart} />
+                {
+                    hasPermission({ id: "some-user-id", role: "admin" }, "view:products") 
+                        && <ProductsGrid products={products} loadCart={loadCart} />
+                }
             </div>
         </>
     );

@@ -1,3 +1,5 @@
+import type { Role } from "../auth/auth";
+
 // Product types
 export interface Product {
   id: string;
@@ -145,4 +147,11 @@ export interface OrderDetailsProps {
 
 export interface OrdersHeaderProps {
   order: Order;
+}
+
+export interface User {
+  id: string;
+  role: Role;
+  name: string;
+  age: number;
 }
