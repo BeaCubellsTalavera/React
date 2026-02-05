@@ -50,11 +50,11 @@ function HomePage({ loadCart }: HomePageProps) {
             </div>
 
             {
-                hasPermission(user, "update:products")
+                (hasPermission(user, "update:products")
                 || (
                     hasPermission(user, "update:ownProducts")
                     && user.id === authorId
-                )
+                ))
                 && (
                     <div>
                         Dummy update own products test
